@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>India Candle AI</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <div class="eyebrow">AI MARKET INTELLIGENCE · TRUST-AWARE</div>
+    <div class="brand">INDIA CANDLE AI</div>
+    <div class="sub">Multi-stock prediction · risk intelligence · repository freshness</div>
+  </div>
+  <div class="top-right">
+    <span id="providerBadge" class="badge">MARKET DATA: CHECKING</span>
+    <span id="catalogBadge" class="badge">UNIVERSE: CHECKING</span>
+    <span id="overallBadge" class="badge badge-green">TRUST: READY</span>
+  </div>
+</header>
+<nav class="tabs">
+  <button class="tab active" data-tab="market">Market Predictor</button>
+  <button class="tab" data-tab="trust">TrustGraph</button>
+  <button class="tab" data-tab="repository">Repository Health</button>
+  <button class="tab" data-tab="journal">Signal Journal</button>
+</nav>
+
+<main class="shell">
+<section class="hero">
+  <div>
+    <span class="eyebrow">CORE PRODUCT</span>
+    <h1>Predict the next market move without pretending the evidence is perfect.</h1>
+    <p>Search the Indian listed-security universe, select a timeframe, validate the model, review risk and receive BUY, SELL, HOLD or REVALIDATE only when the evidence gates support it.</p>
+  </div>
+  <div class="hero-callout">
+    <strong>90% selective-signal precision gate</strong>
+    <p>The model is not forced to trade. It optimizes the confidence threshold and promotes a BUY/SELL signal only when the chronological validation window meets the configured precision gate.</p>
+  </div>
+</section>
+
+<section id="market" class="tab-panel active">
+  <section class="control-card market-controls">
+    <div class="field grow search-wrap">
+      <label>STOCK / COMPANY</label>
+      <div class="input-row">
+        <input id="symbol" autocomplete="off" value="TCS" placeholder="Search any listed Indian stock or company…">
+        <button id="browseBtn" class="btn btn-soft">BROWSE LIST</button>
+      </div>
+      <div id="stockSuggestions" class="suggestions hidden"></div>
+      <small id="catalogHint" class="field-hint">Search the current Indian security directory by symbol or company name; small-cap and SME names are included when the exchange catalogue is available.</small>
+    </div>
+    <div class="field">
+      <label>TIMEFRAME</label>
+      <select id="interval">
+        <option selected>5m</option>
+        <option>15m</option>
+        <option>30m</option>
+        <option>60m</option>
+        <option>1d</option>
+      </select>
+    </div>
+    <div class="field chart-window-field">
+      <label>CHART WINDOW</label>
+      <select id="chartWindow">
+        <option value="24" selected>24 candles</option>
+        <option value="36">36 candles</option>
+        <option value="48">48 candles</option>
+        <option value="60">60 candles</option>
+        <option value="90">90 candles</option>
+      </select>
+    </div>
+    <button id="analyzeBtn" class="btn btn-primary">ANALYZE STOCK</button>
+    <button id="retrainBtn" class="btn">RETRAIN MODEL</button>
+    <button id="fullBtn" class="btn btn-dark">RUN FULL ANALYSIS</button>
+  </section>
+  <div id="marketMessage" class="message hidden"></div>
+
+  <section class="trust-strip" id="trustStrip">
+    <div><span>MARKET DATA</span><b id="dataState">—</b></div>
+    <div><span>MODEL GATE</span><b id="modelState">—</b></div>
+    <div><span>MODEL VERSION</span><b id="modelVersion">—</b></div>
+    <div><span>TRUST SCORE</span><b id="trustScore">—</b></div>
+    <div class="trust-main"><span>OVERALL DECISION</span><b id="trustStatus">READY</b></div>
+  </section>
+
+  <section class="metrics">
+    <div class="metric"><span>Current</span><strong id="current">—</strong></div>
+    <div class="metric"><span>Next close</span><strong id="nextClose">—</strong></div>
+    <div class="metric"><span>Next high</span><strong id="nextHigh">—</strong></div>
+    <div class="metric"><span>Next low</span><strong id="nextLow">—</strong></div>
+    <div class="metric"><span>EOD close</span><strong id="eodClose">—</strong></div>
+    <div class="metric signal-card"><span>TRADING ACTION</span><strong id="signal">—</strong><small id="confidence">Confidence —</small></div>
+  </section>
+
+  <section class="grid two">
+    <div class="panel chart-panel">
+      <div class="panel-head">
+        <div><span class="eyebrow">MARKET PATH</span><h2 id="chartTitle">Candlestick chart</h2></div>
+        <div class="pill" id="probability">UP —</div>
+      </div>
+      <div class="chart-shell"><canvas id="chart" width="1200" height="540"></canvas><div id="chartTip" class="chart-tip hidden"></div></div>
+      <div class="legend"><span>Green = bullish</span><span>Red = bearish</span><span id="chartWindowLabel">24 candles</span><span>Hover: O / H / L / C</span><span>Blue = predicted next close</span></div>
+      <div id="latestCandle" class="latest-candle"><span>Latest candle</span><b>—</b><small>Run an analysis</small></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><span class="eyebrow">WHY THIS DECISION?</span><h2>Explainability</h2></div><div class="pill" id="regime">REGIME —</div></div>
+      <div id="reasons" class="reason-list"></div>
+      <div class="mini-divider"></div>
+      <div class="eyebrow">RISK FACTORS</div>
+      <div id="risks" class="reason-list"></div>
+      <div class="mini-divider"></div>
+      <div id="decisionNote" class="decision-note">Run an analysis to populate the decision explanation.</div>
+    </div>
+  </section>
+
+  <section class="grid two">
+    <div class="panel">
+      <div class="panel-head"><div><span class="eyebrow">RISK ENGINE</span><h2>Trader risk view</h2></div><div class="gate-pill" id="riskPill">RISK —</div></div>
+      <div class="validation-grid" id="riskGrid"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><span class="eyebrow">MODEL OPERATIONS</span><h2>Training and cache</h2></div><button id="backtestBtn" class="btn">RECHECK BACKTEST</button></div>
+      <div class="validation-grid" id="modelOps"></div>
+    </div>
+  </section>
+
+  <section class="grid two">
+    <div class="panel">
+      <div class="panel-head"><div><span class="eyebrow">NEWS CONTEXT</span><h2>Market context</h2></div><div class="pill" id="newsImpact">Impact —</div></div>
+      <div id="newsSummary" class="news-summary"></div>
+      <div id="newsList" class="news-list"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><span class="eyebrow">DATA FRESHNESS</span><h2>Market-data status</h2></div><div class="pill" id="dataFreshPill">—</div></div>
+      <div class="validation-grid" id="dataFreshness"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><div><span class="eyebrow">MODEL VALIDATION</span><h2>Measured, not guaranteed</h2></div><div class="gate-pill" id="gatePill">GATE —</div></div>
+    <div class="validation-grid" id="validation"></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><div><span class="eyebrow">HISTORICAL SIMULATION</span><h2>Validation-window backtest</h2></div><span class="pill" id="backtestPeriod">—</span></div>
+    <div class="validation-grid" id="backtest"></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><div><span class="eyebrow">WATCHLIST</span><h2>Track multiple stocks</h2></div><button id="pulseBtn" class="btn">REFRESH WATCHLIST</button></div>
+    <div class="watch-add"><input id="watchInput" placeholder="Add symbol or company…"><button id="watchAddBtn" class="btn">ADD</button></div>
+    <div id="watchChips" class="watch-chips"></div>
+    <div id="pulseGrid" class="pulse-grid"></div>
+  </section>
+</section>
+
+<section id="trust" class="tab-panel">
+  <section class="hero compact"><div><span class="eyebrow">TRUSTGRAPH</span><h2>Market evidence + model evidence + environment evidence.</h2><p>The final action is evaluated against model quality, market-data freshness, volatility, contextual conflict and repository state when the monitored repository is explicitly bound to the model environment.</p></div></section>
+  <section class="trust-graph" id="trustChecks"></section>
+  <section class="panel"><div class="panel-head"><div><span class="eyebrow">DECISION REPORT</span><h2 id="trustHeadline">No analysis yet</h2></div></div><pre id="trustReport" class="report-box">Run an analysis to populate the trust report.</pre></section>
+</section>
+
+<section id="repository" class="tab-panel">
+  <section class="hero compact">
+    <div><span class="eyebrow">REPOSITORY HEALTH</span><h2>Audit any public GitHub repository — not just stock-market repositories.</h2><p>A baseline is a cryptographic snapshot plus the accepted manifest, component fingerprints, dependency state and security findings. Clone & Monitor creates a local working copy of any public repository, records an accepted baseline, and compares future checks against it. External repositories are audited for drift, dependencies, security and impact; they affect stock-model trust only when you explicitly bind them.</p></div>
+    <div class="hero-callout"><strong>What Clone & Monitor actually does</strong><div class="step-list"><div><b>1</b><span>Clone the repository</span></div><div><b>2</b><span>Accept its baseline</span></div><div><b>3</b><span>Check or refresh later</span></div><div><b>4</b><span>See changes, security and impact</span></div><div><b>5</b><span>Bind to model trust only if appropriate</span></div></div></div>
+  </section>
+  <div id="repoMessage" class="message hidden"></div>
+  <section class="control-card">
+    <button id="acceptBtn" class="btn btn-primary">SCAN & ACCEPT BASELINE</button>
+    <button id="checkBtn" class="btn">CHECK FOR UPDATES</button>
+    <button id="simulateBtn" class="btn btn-dark">SIMULATE OVERNIGHT UPDATE</button>
+    <button id="resetBtn" class="btn btn-danger">RESET TO MODEL WORKSPACE</button>
+  </section>
+  <section class="control-card">
+    <div class="field grow"><label>PUBLIC GITHUB REPOSITORY</label><input id="githubUrl" placeholder="https://github.com/owner/repository"></div>
+    <button id="githubBtn" class="btn">CLONE & MONITOR</button>
+    <button id="githubRefreshBtn" class="btn">REFRESH REMOTE</button>
+    <button id="bindBtn" class="btn btn-dark">BIND TO MODEL TRUST</button>
+  </section>
+  <section class="panel repo-source-box">
+    <div class="panel-head"><div><span class="eyebrow">CURRENT SOURCE</span><h2 id="repoSourceTitle">—</h2></div><div class="pill" id="repoScope">—</div></div>
+    <div id="repoPath" class="mono-box">—</div>
+    <p id="baselineDefinition">—</p>
+    <p id="monitoringDefinition" class="muted">—</p>
+  </section>
+  <section class="trust-strip">
+    <div><span>REPOSITORY</span><b id="repoStateBig">—</b></div>
+    <div><span>FILES</span><b id="repoFiles">—</b></div>
+    <div><span>SECURITY</span><b id="securityScore">—</b></div>
+    <div><span>DEPENDENCY CHANGE</span><b id="depChange">—</b></div>
+    <div class="trust-main"><span>REVALIDATION</span><b id="revalidation">—</b></div>
+  </section>
+  <section class="grid two">
+    <div class="panel"><span class="eyebrow">COMPONENT FINGERPRINTS</span><h2>What actually changed?</h2><div id="components" class="component-grid"></div></div>
+    <div class="panel"><span class="eyebrow">CHANGE IMPACT</span><h2>Required action</h2><div id="impactList" class="impact-list"></div></div>
+  </section>
+  <section class="panel"><div class="panel-head"><div><span class="eyebrow">SECURITY / CODE QUALITY</span><h2>Current findings</h2></div></div><div id="findings"></div></section>
+  <section class="panel"><span class="eyebrow">AUDIT TRAIL</span><h2>Repository events</h2><div id="audit"></div></section>
+</section>
+
+<section id="journal" class="tab-panel">
+  <section class="hero compact"><div><span class="eyebrow">SIGNAL JOURNAL</span><h2>Every generated action leaves an audit trail.</h2><p>Time, stock, timeframe, action, confidence, model version, repository state and data state are preserved for review.</p></div></section>
+  <section class="panel"><div class="panel-head"><h2>Recent signals</h2><button id="journalBtn" class="btn">REFRESH</button></div><div id="journalTable" class="table-wrap"></div></section>
+</section>
+
+<div id="stockModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head"><div><span class="eyebrow">STOCK DIRECTORY</span><h2>Indian listed securities</h2></div><button id="closeModalBtn" class="btn">CLOSE</button></div>
+    <div class="modal-controls"><input id="directorySearch" placeholder="Search symbol or company…"><span id="directoryCount" class="pill">—</span></div>
+    <div id="directoryList" class="directory-list"></div>
+  </div>
+</div>
+
+<footer>Paper analysis only — no orders are placed. A validation gate is a safety decision, not a profitability guarantee.</footer>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>
